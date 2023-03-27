@@ -30,24 +30,24 @@ HOME = {
 
 "Try it out now and see how it can help you with all of your PDF needs!",
     "HomeACB" : {
-        "⚙️ SETTINGS ⚙️" : "Home|B",
-        "🌍 LANGUAGE 🌍" : "set|lang",
-        "⚠️ HELP ⚠️" : "Home|C",
-        "📢 CHANNEL 📢" : f"{str(settings.OWNED_CHANNEL)}",
-        "🌟 SOURCE CODE 🌟" : f"{str(settings.SOURCE_CODE)}",
-        "➕ ADD IN GROUP ➕" : "https://t.me/{}?startgroup=True"
-    },
-    "HomeAdminCB" : {
-        "⚙️ SETTINGS ⚙️" : "Home|B",
-        "🌍 LANGUAGE 🌍" : "set|lang",
-        "⚠️ HELP ⚠️" : "Home|C",
-        "📢 CHANNEL 📢" : f"{str(settings.OWNED_CHANNEL)}",
-        "🌟 SOURCE CODE 🌟" : f"{str(settings.SOURCE_CODE)}",
-        "🗽 STATUS 🗽" : f"status|home",
-        "➕ ADD IN GROUP ➕" : "https://t.me/{}?startgroup=True",
-        "🚶 CLOSE 🚶" : "close|mee"
-    },
-    "HomeB" : """SETTINGS PAGE ⚙️
+    "🔧 SETTINGS" : "Home|B",
+    "🌐 LANGUAGE" : "set|lang",
+    "❓ HELP" : "Home|C",
+    "📢 CHANNEL" : f"{str(settings.OWNED_CHANNEL)}",
+    "💻 SOURCE CODE" : f"{str(settings.SOURCE_CODE)}",
+    "👥 ADD TO GROUP" : "https://t.me/{}?startgroup=True"
+},  
+    "HomeAdminCB": {
+    "🔧 SETTINGS": "Home|B",
+    "🌐 LANGUAGE": "set|lang",
+    "❓ HELP": "Home|C",
+    "📢 CHANNEL": f"{str(settings.OWNED_CHANNEL)}",
+    "💻 SOURCE CODE": f"{str(settings.SOURCE_CODE)}",
+    "🗽 STATUS": f"status|home",
+    "👥 ADD TO GROUP": "https://t.me/{}?startgroup=True",
+    "🚶 CLOSE": "close|mee"
+},
+    "HomeB" : """SETTINGS PAGE 🔧
 
 USER NAME   : {}
 USER ID           : {}
