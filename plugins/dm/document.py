@@ -47,14 +47,14 @@ wordFiles = [
     ".dot", ".bmp", ".gif", ".pcl",
     ".dotx", ".dotm", ".flatOpc", ".html",
     ".mhtml", ".md", ".xps", ".svg", ".tiff",
-    ".txt", ".mobi", ".chm", ".emf", ".ps", ".docx", ".doc"
+    ".txt", ".mobi", ".chm", ".emf", ".ps",
+    ".docx", ".doc", ".ppt", ".pptx", ".xlsx"
 ]
 
 cnvrt_api_2PDF = [
     ".csv", ".log", ".mpp", ".mpt", ".odt", ".pot", ".potx", ".pps",
-    ".ppsx", ".ppt", ".pptx", ".pub", ".rtf", ".txt", ".vdx", ".vsd",
-    ".vsdx", ".vst", ".vstx", ".wpd", ".wps", ".wri", ".xls", ".xlsb",
-    ".xlsx", ".xlt", ".xltx", ".xml"
+    ".ppsx", ".pub", ".rtf", ".txt", ".vdx", ".vsd",
+    ".vsdx", ".vst", ".vstx", ".wpd", ".wps", ".wri", ".xls", ".xlsb", ".xlt", ".xltx", ".xml"
 ]                                       # file to pdf (ConvertAPI limit)
 
 # ==================| PYMUPDF FILES TO PDF |===========================================================================================================================
