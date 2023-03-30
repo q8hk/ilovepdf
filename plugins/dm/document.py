@@ -3,7 +3,7 @@
 fileName = "plugins/dm/document.py"
     
 import convertapi
-import os, time, fitz
+import os, time, fitz, subprocess
 import shutil, asyncio
 
 from plugins.util   import *
@@ -18,6 +18,7 @@ from logger         import logger
 from configs.config import settings, images
 from plugins.fncta  import thumbName, formatThumb
 from pyrogram       import Client as ILovePDF, filters, enums
+
 
 try:
     import aspose.words as word
@@ -46,14 +47,14 @@ wordFiles = [
     ".dot", ".bmp", ".gif", ".pcl",
     ".dotx", ".dotm", ".flatOpc", ".html",
     ".mhtml", ".md", ".xps", ".svg", ".tiff",
-    ".txt", ".mobi", ".chm", ".emf", ".ps", 
+    ".txt", ".mobi", ".chm", ".emf", ".ps", ".docx", ".doc"
 ]
 
 cnvrt_api_2PDF = [
     ".csv", ".log", ".mpp", ".mpt", ".odt", ".pot", ".potx", ".pps",
     ".ppsx", ".ppt", ".pptx", ".pub", ".rtf", ".txt", ".vdx", ".vsd",
     ".vsdx", ".vst", ".vstx", ".wpd", ".wps", ".wri", ".xls", ".xlsb",
-    ".xlsx", ".xlt", ".xltx", ".xml", ".docx", ".doc"
+    ".xlsx", ".xlt", ".xltx", ".xml"
 ]                                       # file to pdf (ConvertAPI limit)
 
 # ==================| PYMUPDF FILES TO PDF |===========================================================================================================================
@@ -95,6 +96,20 @@ async def word2PDF(cDIR, edit, input_file, lang_code):
         tTXT, tBTN = await translate(text="document['error']", lang_code=lang_code)
         await edit.edit(tTXT.format(e))
         return False
+    
+    # =================================================================================================================================| WORD FILES TO PDF |===============
+async def word2PDF2(cDIR, edit, input_file, lang_code):
+    try:
+        # convert(input_file, f"{cDIR}/outPut.pdf")
+        subprocess.call(['unoconv', '-f', 'pdf', '-o', f"{cDIR}/outPut.pdf", input_file])
+        # doc = word.Document(input_file)
+        # doc.save(f"{cDIR}/outPut.pdf")
+        return True
+    except Exception as e:
+        tTXT, tBTN = await translate(text="document['error']", lang_code=lang_code)
+        await edit.edit(tTXT.format(e))
+        return False
+
 
 # ====================================================================================| REPLY TO DOC. FILES |==========================================================
 @ILovePDF.on_message(filters.private & filters.incoming & filters.document)
@@ -199,7 +214,10 @@ async def documents(bot, message):
             
             elif fileExt.lower() in wordFiles:
                 FILE_NAME, FILE_CAPT, THUMBNAIL = await thumbName(message, f"{fileNm}.pdf")
-                isError = await word2PDF(cDIR, pdfMsgId, input_file, lang_code)
+                if(fileExt.lower() is '.doc' or '.doxc'):
+                    isError = await word2PDF2(cDIR,pdfMsgId,input_file,lang_code)
+                else:
+                    isError = await word2PDF(cDIR, pdfMsgId, input_file, lang_code)
             
             if not isError:
                 return await work(message, "delete", True)
