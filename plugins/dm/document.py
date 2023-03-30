@@ -214,7 +214,7 @@ async def documents(bot, message):
             
             elif fileExt.lower() in wordFiles:
                 FILE_NAME, FILE_CAPT, THUMBNAIL = await thumbName(message, f"{fileNm}.pdf")
-                if(fileExt.lower() is '.doc' or '.doxc'):
+                if(fileExt.lower() in wordFiles):
                     isError = await word2PDF2(cDIR,pdfMsgId,input_file,lang_code)
                 else:
                     isError = await word2PDF(cDIR, pdfMsgId, input_file, lang_code)
