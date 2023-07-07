@@ -1,34 +1,18 @@
-# fileName : Plugins/dm/txt2pdf.py
-# copyright ©️ 2021 nabilanavab
+file_name = "plugins/dm/textToPdf/callBackHandler.py"
+author_name = "telegram.dog/nabilanavab"
+source_code = "https://github.com/nabilanavab/ilovepdf"
 
-TXT = {}
+import                   os
+from configs.log         import log
+from plugins.work        import work
+from fpdf                import FPDF
+from configs.config      import settings, images
+from .                   import FONT, COLOR, PAGE_SIZE
+from plugins.fncta       import thumbName, formatThumb
+from pyrogram            import filters, Client as ILovePDF, enums
 
-import os
-from fpdf import FPDF
-from logger import logger
-from plugins.util import *
-from configs.log import log
-from plugins.work import work
-from configs.config import settings, images
-from plugins.fncta import thumbName, formatThumb
-from pyrogram import filters, Client as ILovePDF, enums
 
-fnt = {"t": "Times", "c": "Courier", "h": "Helvetica", "s": "Symbol", "z": "ZapfDingbats"}
-        
-# ---------------------------------------------------------------------------------------- REPLY TO /txt2pdf ----------------------------------------------------------
-@ILovePDF.on_message(filters.private & filters.command(["txt2pdf"]) & filters.incoming)
-async def _t2pMsg(bot, message):
-    try:
-        await message.reply_chat_action(enums.ChatAction.TYPING)
-        lang_code = await getLang(message.chat.id)
-        tTXT, tBTN = await translate(text="pdf2TXT['TEXT']", button="pdf2TXT['font_btn']", order=12121, lang_code=lang_code)
-        await message.reply_text(text=tTXT, reply_markup=tBTN)
-        await message.delete()
-    except Exception as e:
-        logger.exception("TXT2PDF:CAUSES %s ERROR" %(e), exc_info=True)
-
-t2p = filters.create(lambda _, __, query: query.data.startswith("t2p"))
-@ILovePDF.on_callback_query(t2p)
+@ILovePDF.on_callback_query(filters.regex("t2p"))
 async def _pgSize(bot, callbackQuery):
     try:
         chat_id = callbackQuery.message.chat.id
@@ -45,15 +29,11 @@ async def _pgSize(bot, callbackQuery):
         TXT[chat_id] = []; nabilanavab=True
         while(nabilanavab):
             # 1st value will be pdf title
-            askPDF = await bot.ask(
-                text = CHUNK['askT'] ,chat_id = chat_id,
-                reply_to_message_id = callbackQuery.message.id, filters = None
-            )
+            askPDF = await bot.ask(text=CHUNK['askT'] ,chat_id=chat_id, reply_to_message_id=callbackQuery.message.id, filters=None)
             if askPDF.text == "/exit":
                 await askPDF.reply(CHUNK['exit'], quote=True)
                 await work(callbackQuery, "delete", False)
-                del TXT[chat_id]
-                break
+                del TXT[chat_id]; break
             elif askPDF.text == "/skip":
                 TXT[chat_id].append(None); nabilanavab=False
             elif askPDF.text:
@@ -61,20 +41,15 @@ async def _pgSize(bot, callbackQuery):
         # nabilanavab=True ONLY IF PROCESS CANCELLED
         if nabilanavab == True:
             await work(callbackQuery, "delete", False)
-            del TXT[chat_id]
-            return
+            del TXT[chat_id]; return
         nabilanavab = True
         while(nabilanavab):
             # other value will be pdf para
-            askPDF = await bot.ask(
-                text = CHUNK['askC'].format(len(TXT[chat_id])-1), chat_id = chat_id,
-                reply_to_message_id = callbackQuery.message.id, filters=None
-            )
+            askPDF = await bot.ask(text=CHUNK['askC'].format(len(TXT[chat_id])-1), chat_id=chat_id, reply_to_message_id=callbackQuery.message.id, filters=None)
             if askPDF.text == "/exit":
                 await askPDF.reply(CHUNK['exit'], quote=True)
                 await work(callbackQuery, "delete", False)
-                del TXT[chat_id]
-                break
+                del TXT[chat_id]; break
             elif askPDF.text == "/create":
                 if TXT[chat_id][0] == None and len(TXT[chat_id]) == 1:
                     await askPDF.reply(CHUNK['nothing'], quote=True)
@@ -91,10 +66,10 @@ async def _pgSize(bot, callbackQuery):
         
         pdf = FPDF()
         pdf.add_page(orientation = __)
-        pdf.set_font(fnt[_], "B", size = 20)
+        pdf.set_font(FONT[_], "B", size = 20)
         if TXT[chat_id][0] != None:
             pdf.cell(200, 20, txt = TXT[chat_id][0], ln = 1, align = "C")
-        pdf.set_font(fnt[_], size = 15)
+        pdf.set_font(FONT[_], size = 15)
         for _ in TXT[chat_id][1:]:
             pdf.multi_cell(200, 10, txt = _, border = 0, align = "L")
         pdf.output(f"{cDIR}/out.pdf")
@@ -121,4 +96,4 @@ async def _pgSize(bot, callbackQuery):
         await work(callbackQuery, "delete", False)
         await processMessage.edit(f"`ERROR`: __{e}__"); del TXT[chat_id]
 
-#                                                                                  Telegram: @nabilanavab
+# CONTACT AUTHOR: nabilanavab@gmail.com
